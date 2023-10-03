@@ -1,0 +1,229 @@
+{% extends "Customer/base.html" %}
+{% block title %}Healthy Living - Cart{% endblock %}
+
+{% block content %}
+<style>
+.hidden {
+  display: none;
+}
+</style>
+<script src="https://js.stripe.com/v3/"></script>
+<div class="container mt-4">
+  <h1 class="text-center">Your Cart</h1>
+  <div class="mb-3">
+    <a href="/product" class="btn bgd-light">Back to Products</a>
+  </div>
+  <div class="d-flex flex-column">
+  {% if cart_items %}
+  <table class="table table-striped mt-4 mr-4">
+    <thead class="bgd-dark">
+      <tr>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Size</th>
+        <th>Color</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody class="bgd-light">
+      {% for item in cart_items %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>${{ "%0.2f"|format(item.price) }}</td>
+        <td>
+          <!-- Update Form -->
+          <form action="{{ url_for('update_cart_item', cart_item_id=item.product_id) }}" method="POST" class="d-inline">
+            <input type="hidden" name="action" value="increment">
+            <button type="submit" class="btn btn-sm bgd-dark">+</button>
+          </form>
+          <text id="quantity" data-stock="{{ item.stock }}">{{ item.quantity }}</text>
+          <form action="{{ url_for('update_cart_item', cart_item_id=item.product_id) }}" method="POST" class="d-inline">
+            <input type="hidden" name="action" value="decrement">
+            <button type="submit" class="btn btn-sm bgd-dark">-</button>
+          </form>
+        </td>
+        <td>
+          <form action="{{ url_for('update_cart_item', cart_item_id=item.product_id) }}" method="POST" class="d-inline">
+          <select name="size" onchange="this.form.submit()">
+            {% for size_option in item.size_options %}
+              <option value="{{ size_option }}" {% if item.size == size_option %}selected{% endif %}>{{ size_option }}</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td>
+          <select name="color" onchange="this.form.submit()">
+          {% for color_option in item.color_options %}
+            <option value="{{ color_option }}" {% if item.color == color_option %}selected{% endif %}>{{ color_option }}</option>
+          {% endfor %}
+          </select>
+          </form>
+        </td>
+        <td>${{ "%0.2f"|format(item.price * item.quantity) }}</td>
+        <td>
+          <form action="{{ url_for('delete_cart_item', cart_item_id=item.product_id) }}" method="POST">
+            <button type="submit" class="btn bgd-dark">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <!-- Right side - Order summary -->
+<div class="flex-grow-1">
+  <h2 class="mb-4">Order Summary</h2>
+  <!-- Subtotal, Promo code discount, Shipping costs, and Total cost -->
+  <hr class="bgd-light">
+  <div class="d-flex justify-content-between">
+    <div>Subtotal:</div>
+    <div id="subtotal">${{ "%0.2f"|format(cart_total) }}</div>
+  </div>
+  <div class="d-flex justify-content-between">
+    <div>Shipping Costs:</div>
+    <div id="shipping_costs">$5</div>
+  </div>
+  <hr class="bgd-light">
+  <div class="d-flex justify-content-between font-weight-bold">
+    <div>Total:</div>
+    <div id="total_cost">${{ "%0.2f"|format(cart_total + 5) }}</div>
+  </div>
+  <div class="d-flex justify-content-around align-items-end mt-4">
+    <div class="d-flex flex-column ">
+      <form action="{{ url_for('updateshippingforexpcheckout')}}" method="POST" class="d-flex justify-content-around">
+        <select name="Shipping" id="shipping_costs_input" style="display: none;" class="m-3 text-center">
+          <option value="Standard Delivery">Standard Delivery +($5)</option>
+          <option value="Express Delivery">Express Delivery +($10)</option>
+        </select>
+      </form>
+      <span id="please_wait" style="display: none;">Please wait for 3 seconds for Express Checkout to appear below</span>
+      <div id="express-checkout-element" class="mr-2"></div>
+    </div>
+    <a href="/payment" class="btn bgd-light text-center" style="max-height: 44px;">Checkout with card & redeem promocodes</a>
+  </div>
+  {% else %}
+  <div class="text-center mt-4">
+    <h3>Your cart is empty</h3>
+  </div>
+  {% endif %}
+</div>
+</div>
+<script>
+const stripe = Stripe("pk_test_51NbJAUL0EO5j7e8jnG1wekAMtbCRj97AnTHjfWjiqYWtVAEFli8hfYCfs0vc1C60owBtTjcEiOjMRSH9X7v8V4sU00qLJ1f0Xr");
+
+// The items the customer wants to buy
+const items = [{ id: document.getElementById('product_id') }];
+let expressCheckoutElement = null;
+
+initialize()
+async function initialize() {
+  const response = await fetch("/create_intent", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ items }),
+  });
+  const { clientSecret, amount } = await response.json();
+
+  const elements = stripe.elements({
+    mode: 'payment',
+    amount: amount,
+    currency: 'sgd',
+  })
+  expressCheckoutElement = elements.create('expressCheckout');
+  expressCheckoutElement.mount('#express-checkout-element');
+
+  expressCheckoutElement.on('confirm', function(event) {
+    // call Stripe function to initiate payment confirmation
+    stripe.confirmPayment({
+      elements,
+      clientSecret,
+      confirmParams: {
+        return_url: 'https://confunius-sturdy-space-guide-9pwww99p7vqfxrqw-5000.app.github.dev/thankyou',
+      },
+    })
+  });
+  var shipping_costs_input = document.getElementById('shipping_costs_input');
+
+  shipping_costs_input.addEventListener('change', async function(e) {
+
+    const shipping = e.target.value;  // Get the new shipping method
+      const response = await fetch('/updateshippingforexpcheckout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ shipping }),  // Send the new shipping method
+      });
+      // console.log("Response status:", response.status);  // Debug: log the response status
+      // console.log("Response body:", await response.text());
+      const { clientSecret, amount, shipping_cost } = await response.json();
+      // Convert the amounts from cents to dollars
+      const totalAmountDollars = amount / 100;
+      const shippingAmountDollars = shipping_cost;
+      console.log("shipping_cost", shipping_cost)
+
+      // Calculate the new subtotal as the total amount minus the shipping amount
+      const newSubtotal = totalAmountDollars - shippingAmountDollars;
+
+      // Update the fields on the webpage
+      document.getElementById('subtotal').innerHTML = "$" + newSubtotal.toFixed(2);
+      document.getElementById('shipping_costs').innerHTML = "$" + shippingAmountDollars;
+      document.getElementById('total_cost').innerHTML = "$" + totalAmountDollars.toFixed(2);
+
+
+      const elements = stripe.elements({
+        mode: 'payment',
+        amount: amount,
+        currency: 'sgd',
+      })
+
+      if (expressCheckoutElement) {
+      expressCheckoutElement.unmount();
+      }
+      expressCheckoutElement = elements.create('expressCheckout');
+      expressCheckoutElement.mount('#express-checkout-element');
+
+      expressCheckoutElement.on('confirm', function(event) {
+        // call Stripe function to initiate payment confirmation
+        stripe.confirmPayment({
+          elements,
+          clientSecret,
+          confirmParams: {
+            return_url: 'https://confunius-sturdy-space-guide-9pwww99p7vqfxrqw-5000.app.github.dev/thankyou',
+          },
+        })
+      });
+    }
+  );
+};
+
+window.onload = function() {
+    // Step 2: Display the element when the webpage loads
+    var pleaseWaitElement = document.getElementById('please_wait');
+    pleaseWaitElement.style.display = 'block';
+
+    // Step 3: Hide the element after 3 seconds
+    setTimeout(function() {
+        pleaseWaitElement.style.display = 'none';
+        shipping_costs_input.style.display = 'block';
+    }, 3000); // 3000 milliseconds = 3 seconds
+};
+document.addEventListener('DOMContentLoaded', function() {
+        // Get all "+" buttons
+        let incrementButtons = document.querySelectorAll('form [name="action"][value="increment"] + button');
+
+        incrementButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                let quantitySpan = document.getElementById('quantity')
+                let currentQuantity = parseInt(quantitySpan.textContent.trim(), 10);
+                let stock = parseInt(quantitySpan.getAttribute('data-stock'), 10);
+
+                if (currentQuantity + 1 > stock) {
+                    event.preventDefault();  // Prevent the form from submitting
+                    alert('You cannot add more of this product than what is in stock.');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

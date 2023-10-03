@@ -1,0 +1,27 @@
+{ extends "Admin/whbase.html" %} {% block title %}Ecofashion Hub - Change password{% endblock %} {% block content %}
+
+  <!-- Add your main content here -->
+  <div class="col-md-8">
+    <br><br>
+    <!-- Add your main content here -->
+    <div class="container">
+        <h2 style="font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 28px;">ADMIN  CHANGE PASSWORD</h2>
+      <div class="line-container">
+        <hr class="half-screen-line" style="margin-bottom: 5px;">
+      </div>
+      <p style="font-size: 15px; margin-top: 10px;">To change password, please enter your new password below</p>
+      <form>
+        <div class="form-group">
+          <label for="Newpassword">New Password:</label>
+          <input type="text" class="form-control" id="new" value="New Password"  >
+        </div>
+        <div class="form-group">
+          <label for="COnfirmpassword">Confirm Password:</label>
+          <input type="email" class="form-control" id="confirm" value="Confirm Password" >
+        </div>
+        <br>
+        <div class="button-container">
+            <button type="submit" class="btn btn-primary settings-btn" style="color: #4b6043;">UPDATE</button>
+        </div>
+        </form>
+{% endblock %}

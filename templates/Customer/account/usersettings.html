@@ -1,0 +1,85 @@
+{% extends "Customer/base.html" %}
+{% block title %}Healthy Living - Customer Profile{% endblock %}
+
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+  <div class="container-fluid">
+    <div class="row flex-row">
+      <!-- Vertical Navbar -->
+      <nav class="list-group vertical-nav pr-5 border-right" style ="border-right-width: 5px!important;">
+        <ul class="navbar-nav">
+          <li></li>
+          <li class="nav-item active list-group-item">
+              <a class="nav-link txt-light" href="/UserProfile">My Account </a>
+          </li>
+          <li class="nav-item list-group-item">
+              <a class="nav-link txt-light" href="/Wishlist">My Wishlist</a>
+          </li>
+          <li class="nav-item list-group-item">
+              <a class="nav-link txt-light" href="/OrderStatus">Order Status</a>
+          </li>
+          <li class="nav-item list-group-item">
+              <a class="nav-link txt-light" href="/OrderHistory">Order History</a>
+          </li>
+          <li class="nav-item list-group-item">
+            <a class="nav-link txt-light" href="{{ url_for('PaymentMethod', id=session['id'])}} ">Payment Methods</a>
+          </li>
+          <!-- Add more history items as needed -->
+        </ul>
+      </nav>
+      <div class="flex-fill">
+        <!-- Add your main content here -->
+        <div class="container d-flex flex-column txt-light p-3 ml-5">
+          <h2 style="font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 28px;">ACCOUNT INFORMATION</h2>
+          <div class="line-container">
+            <hr class="half-screen-line">
+          </div>
+          <form method="POST" action="{{ url_for('EditCustomerAccount', id=session['id']) }}">
+            {{ form.csrf_token }}
+            <div class="form-group">
+              {{ render_field(form.userFullName, class="form-control", style="width: 300px; height:40px;")}}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.userName, class="form-control", style="width: 300px; height:40px;")}}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.userEmail, class="form-control", style="width: 300px; height:40px;")}}
+            </div>
+            <br>
+            <h2 style="font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 28px;">CHANGE ADDRESS</h2>
+            <div class="line-container">
+                <hr class="half-screen-line">
+            </div>
+            <br>
+              <div class="form-group">
+                {{ render_field(form.userAddress, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+              <div class="form-group">
+                {{ render_field(form.userPostalCode, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+              <br>
+              <div class="button-container">
+                <button type="submit" class="btn btn-primary settings-btn" style="color: #4b6043">Save</button>
+            </div>
+          </form>
+            <div class="link-container">
+              <a href="{{ url_for('CustomerChangePassword', id=session['id']) }}">Change Password</a>
+            </div>
+            <br>
+                <div class="button-container">
+                  <button type="submit" class="btn btn-primary settings-btn" style="color: #82000a;">Deactivate Account</button>
+                  </form>
+                </div>
+            </form>
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+{% endblock %}

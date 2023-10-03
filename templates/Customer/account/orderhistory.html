@@ -1,0 +1,70 @@
+{% extends "Customer/base.html" %}
+{% block title %}Healthy Living - Customer Order History{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row flex-row">
+      <!-- Vertical Navbar -->
+      <nav class="list-group vertical-nav pr-5 border-right" style ="border-right-width: 5px!important;">
+        <ul class="navbar-nav">
+          <li></li>
+          <li class="nav-item active list-group-item">
+              <a class="nav-link txt-light" href="/UserProfile">My Account </a>
+          </li>
+          <li class="nav-item list-group-item">
+              <a class="nav-link txt-light" href="/Wishlist">My Wishlist</a>
+          </li>
+          <li class="nav-item list-group-item">
+              <a class="nav-link txt-light" href="/OrderStatus">Order Status</a>
+          </li>
+          <li class="nav-item list-group-item">
+              <a class="nav-link txt-light" href="/OrderHistory">Order History</a>
+          </li>
+          <li class="nav-item list-group-item">
+            <a class="nav-link txt-light" href="{{ url_for('PaymentMethod', id=session['id'])}} ">Payment Methods</a>
+          </li>
+          <!-- Add more history items as needed -->
+        </ul>
+      </nav>
+      <div class="flex-fill">
+            <!-- Your main content here -->
+            <div class="container d-flex flex-column ml-5">
+                <h2 style="font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 28px;">ORDER HISTORY</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="bgd-dark">
+                                <th>Product Name:</th>
+                                <th>Product:</th>
+                                <th>Order Date:</th>
+                                <th>Order ID:</th>
+                                <th>Quantity:</th>
+                                <th>Price:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in combined_list %}
+                            {% for product in entry.products %}
+                            <tr class="bgd-light">
+                                <td>{{ product.name }}</td>
+                                <td><img src="{{ product.image }}" alt="{{ product.name }}" style="width:100px"></td>
+                                <td>{{ entry.order.order_date }}</td>
+                                <td>{{ entry.order.order_id }}</td>
+                                <td style="text-align: center;">{{ entry.order.quantity }}</td> <!-- Adjust if quantity is per product -->
+                                <td>${{ product.list_price }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+{% endblock %}

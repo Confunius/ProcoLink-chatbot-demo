@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2ecd8;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #943b46;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #ab916c;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+    </style>
+    {% extends "Customer/base.html" %} {% block title %}Healthy Living - Service Record{% endblock %} {% block content %}
+
+</head>
+<body>
+    <h1>Service Records</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer Service Subject</th>
+                <th>Date Initiated</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="serviceRecordBody">
+            {% for record_id, record in service_records.items() %}
+                {% if session['id']|string == record.user_id|string %}
+                    <tr onclick="redirectToRecordDetail('{{ record_id }}')">
+                        <td>{{ record.subject }}</td>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.status }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+
+    </table>
+    <script>
+        // Function to redirect to the record detail page
+        function redirectToRecordDetail(recordId) {
+            window.location.href = `/record_detail/${recordId}`;
+        }
+        console.log('sessionid', {{ session['id'] }})
+ {% for record_id, record in service_records.items() %}
+        console.log("record.user_id: {{ record.user_id }}");
+        console.log("Comparison result: {{ record.user_id == user_id }}");
+{% endfor %}
+    </script>
+</body>
+</html>
+{% endblock %}

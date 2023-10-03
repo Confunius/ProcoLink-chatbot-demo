@@ -1,0 +1,61 @@
+{% extends "Customer/base.html" %}
+{% block title %}Healthy Living - Create Account {% endblock %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+<script>
+   function onSubmit(token) {
+     document.getElementById("registrationForm").submit();
+   }
+ </script>
+  <div class="container">
+<br>
+    <h1 class="title" style="text-align: center;">Create your account</h1>
+    <br>
+    <div class="form-container">
+      <p style="font-size:13px;" class="text-center">You will receive the confirmation mail to your email address associated with <br> account. Please make sure to check your incoming email with us.</p>
+    <form action="/UserRegistrationPage" method="POST" id="registrationForm" class="p-4 bgd-dark mb-3">
+      <div class="d-flex flex-row flex-wrap">
+        <div class="form-group2 m-3">
+          {{ render_field(form.userFullName, class="form-control")}}
+        </div>
+        <div class="form-group2 m-3">
+          {{ render_field(form.userName, class="form-control")}}
+        </div>
+        <div class="form-group2 m-3">
+          {{ render_field(form.userEmail, class="form-control")}}
+        </div>
+        <div class="form-group2 m-3">
+          {{ render_field(form.userPassword, class="form-control")}}
+        </div>
+        <div class="form-group2 m-3">
+          {{ render_field(form.userCfmPassword, class="form-control")}}
+        </div>
+        <div class="form-group2 m-3">
+          {{ render_field(form.userAddress, class="form-control")}}
+        </div>
+        <div class="form-group2 m-3">
+          {{ render_field(form.userPostalCode, class="form-control")}}
+        </div>
+        <div class="form-group2 m-3">
+          {{ render_field(form.userRole, class="form-control")}}
+        </div>
+      </div>
+      <div class="title" style="color:#4B6043;"><strong><u>MEMBERSHIP AGREEMENT*</u></strong></div>
+      <p style="font-size:13px;">By creating an account, you agree to Ecofashion Hub's Privacy Policy and terms of use.</p>
+    </div>
+      <div class="form-group2 mb-3 d-flex justify-content-center">
+          {{render_field(form.recaptcha, class="form-control")}}
+      </div>
+      <div class="button-container d-flex flex-column">
+      <button type="submit" class="g-recaptcha btn text-light bgd-dark" data-sitekey="{{ site_key }}" data-callback="onSubmit" data-action="submit" style="color: #4b6043;">Create</button>
+      </div>
+  </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+{% endblock %}

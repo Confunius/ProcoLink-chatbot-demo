@@ -1,0 +1,132 @@
+{% extends "Customer/base.html" %}
+{% block title %}Healthy Living - Payment {% endblock %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+<div class="container-fluid">
+  <div class="row flex-row">
+    <!-- Vertical Navbar -->
+    <nav class="list-group vertical-nav pr-5 border-right" style ="border-right-width: 5px!important;">
+      <ul class="navbar-nav">
+        <li></li>
+        <li class="nav-item active list-group-item">
+            <a class="nav-link txt-light" href="/UserProfile">My Account </a>
+        </li>
+        <li class="nav-item list-group-item">
+            <a class="nav-link txt-light" href="/Wishlist">My Wishlist</a>
+        </li>
+        <li class="nav-item list-group-item">
+            <a class="nav-link txt-light" href="/OrderStatus">Order Status</a>
+        </li>
+        <li class="nav-item list-group-item">
+            <a class="nav-link txt-light" href="/OrderHistory">Order History</a>
+        </li>
+        <li class="nav-item list-group-item">
+          <a class="nav-link txt-light" href="{{ url_for('PaymentMethod', id=session['id'])}} ">Payment Methods</a>
+        </li>
+        <!-- Add more history items as needed -->
+      </ul>
+    </nav>
+    <div class="flex-fill">
+        <div class="container d-flex flex-column ml-5">
+          <h3 style="font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 28px;">Payment Methods</h3>
+          <div class="line-container">
+            <hr class="half-screen-line">
+          </div>
+          <form>
+            <div class="form-row">
+              <div class="form-group mr-2">
+                {{ render_field(form.userFullName, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+              <div class="form-group mr-2">
+                {{ render_field(form.userEmail, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group mr-2">
+                  {{ render_field(form.userAddress, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+              <div class="form-group mr-2">
+                  {{ render_field(form.userPostalCode, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+            </div>
+            <h3 style="font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 28px;">Billing Address</h3>
+            <div class="line-container">
+              <hr class="half-screen-line">
+            </div>
+            <div class="form-row">
+              <div class="form-group mr-2">
+                {{ render_field(form.userCardName, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+              <div class="form-group mr-2">
+                {{ render_field(form.userCardNumber, class="form-control", style="width: 300px; height:40px;", id="userCardNumber")}}
+                <div id="cardLogo" style="margin-top: 10px;"></div>
+              </div>
+              </div>
+            <div class="form-row">
+              <div class="form-group mr-2">
+                {{ render_field(form.userCardExp, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+              <div class="form-group mr-2">
+                {{ render_field(form.userCardSec, class="form-control", style="width: 300px; height:40px;")}}
+              </div>
+            </div>
+            <div class="button-container">
+              <button type="submit" class="btn btn-primary settings-btn" style="color: #4b6043">Save</button>
+            </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+<script>
+$(document).ready(function() {
+  $('#userCardNumber').on('input', function() {
+    var cardNumber = $(this).val();
+    // Remove all existing delimiters
+    cardNumber = cardNumber.replace(/-/g, '');
+
+    var cardType = getCardType(cardNumber);
+    updateCardLogo(cardType);
+
+    // Add the delimiter after every four characters
+    var formattedCardNumber = cardNumber.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-');
+    $(this).val(formattedCardNumber);
+  });
+
+  function getCardType(cardNumber) {
+    var visaPattern = /^4[0-9]{12}(?:[0-9]{3})?$/;
+    var mastercardPattern = /^5[1-5][0-9]{14}$/;
+    var amexPattern = /^3[47][0-9]{13}$/;
+
+    if (visaPattern.test(cardNumber)) {
+      return 'visa';
+    } else if (mastercardPattern.test(cardNumber)) {
+      return 'mastercard';
+    } else if (amexPattern.test(cardNumber)) {
+      return 'amex';
+    } else {
+      return 'unknown';
+    }
+  }
+
+  function updateCardLogo(cardType) {
+    var cardLogo = '';
+    if (cardType === 'visa') {
+      cardLogo = '<img src="https://www.visa.com.sg/dam/VCOM/regional/ve/romania/blogs/hero-image/visa-logo-800x450.jpg" alt="Visa" height="40">';
+    } else if (cardType === 'mastercard') {
+      cardLogo = '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/618px-Mastercard-logo.svg.png" alt="MasterCard" height="40">';
+    } else if (cardType === 'amex') {
+      cardLogo = '<img src="https://1000logos.net/wp-content/uploads/2016/10/American-Express-logo.png" alt="American Express" height="40">';
+    } else {
+      cardLogo = '';
+    }
+    $('#cardLogo').html(cardLogo);
+  }
+});
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}

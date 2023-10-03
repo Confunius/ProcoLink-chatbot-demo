@@ -1,0 +1,164 @@
+{% extends "Customer/base.html" %}
+{% block title %}Healthy Living - {{ courseobj.name }}{% endblock %}
+
+{% block content %}
+{% if error_message %}
+<div class="alert alert-danger">
+    {{ error_message }}
+</div>
+{% endif %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ courseobj.image }}" class="img-fluid" alt="{{ courseobj.name }}">
+        </div>
+        <div class="col-md-8">
+            <h2 class="mb-3">{{ courseobj.name }}</h2>
+            <p class="mb-3">Course Details: {{ courseobj.description }}</p>
+            <p class="mb-3">Requirements: {{ courseobj.requirements }}</p>
+            <p class="mb-3">Description: {{ courseobj.description }}</p>
+            <p class="mb-3">Course For Who: {{ courseobj.courseForWho }}</p>
+            <p class="mb-3">Instructor: {{ courseobj.instructor }}</p>
+        </div>
+    </div>
+</div>
+<div class="d-flex flex-column" style="margin-left: 25%;margin-right: 25%;">
+<h1>Course content</h1>
+<div>
+  <h2>Duality of Body and Mind</h2>
+  <p>Here in this course, we will cover 2 different areas related to both the human body and the human mind!</p>
+  <ol>
+    <li>Fundamentals of Nutrition & Exercise</li>
+    <ol>
+      <li>Module 1 - Introduction to Nutrition</li>
+      <li>Module 2 - Exercise Essentials</li>
+    </ol>
+    <li>Psychology</li>
+    <ol>
+      <li>Module 3 - Understanding Motivation</li>
+      <li>Module 4 - Effective Goal Setting</li>
+    </ol>
+  </ol>
+  <h3>Module 1 - Introduction to Nutrition</h3>
+  <text>Here's a video introduction to the basics of nutrition to understand better about this course!</text><br>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/eVBWHnHEX6I?si=9H95of4W0TGEnY61" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  <br/>
+  <br><text>Hope you have enjoyed the video :)</text> <br>
+  <text>Here's an article about the importance of nutrition. Click <a href= "https://www.nutrition.gov/about-us#:~:text=Nutrition.gov%20is%20a%20USDA,and%20food%20safety%20for%20consumers.">here</a>.</text>
+  <br><text>Thanks for reading the article provided to you! To test your knowledge, we have a quiz for you!</text>
+  
+  <br><text>You have completed the first module of this course, Introduction to Nutrition! Let us move on to module 2 of this course, Exercise Essentials!</text>
+
+  <h3>Module 2 - Exercise Essentials</h3>
+  <text>Here's a video introduction about mental health to garner your knowledge about mental health!</text><br>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/G0zJGDokyWQ?si=rKBjzmha55fR9Ov9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> <br/>
+  <text>Hope you have enjoyed the video about mental health:)</text> <br>
+  <br>text>Here's an article about a mental health organization explaining common mental health disorders and the importance of mental well-being. Click <a href= "https://www.cdc.gov/mentalhealth/learn/index.htm">here</a>.</text>
+  <br><text>Thanks for reading the article provided to you! To test your knowledge, we have a quiz for you!</text>
+  
+  <br><text>You have completed the second module of this course, Exercise Essentials! This means that you have completed the first area covered in this course, Fundamentals of Nutrition and Exercise :) We will now be covering the area, Psychology. Let us move on to module 3 of this course, Understanding Motivation!</text>
+  
+  <h3>Module 3 - Understanding Motivation</h3>
+  <text>Here's a video introduction about motivation and behavioural changes!</text><br>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/IhEcX3226pM?si=5anWHe2vS6dujcC4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  <br><text>Hope you have enjoyed the video about motivation and behavioural changes:)</text> <br>
+  <br><text>Here's an article discussing the psychology of motivation and how it influences behavioural change. Click <a href= "https://positivepsychology.com/motivation-human-behavior/">here</a>.</text>
+  <br><text>Thanks for reading the article provided to you! To test your knowledge, we have a quiz for you!</text>
+ 
+  <br><text>You have completed the third module of this course, Understanding Motivation! Let us move on to the last module, module 4 of this course, Effective Goal Setting!</text>
+
+  <h3>Module 4 - Effective Goal Setting</h3>
+  <text>Here's a video introduction about setting goals, you will learn effective techniques such as SMART to improve how you set a goal for yourself!</text><br>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/IzuGj8hKGTc?si=wquLtKqS7YTRguz5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  <br><text>Here's an article explaining the SMART goalsetting framework for wellness coaching. Click <a href= "https://www.noomii.com/articles/13906-smart-goal-method">here</a>.</text>
+  <br><text>Thanks for reading the article provided to you! To test your knowledge, we have a quiz for you!</text>
+  
+  <br><text>You have completed every module of this course! You have came so far and a job well done! Next, let us get your feedback for this course to allow for rooms of improvement.</text>
+  </div>
+  
+  <br>
+  <h3>Feedback Form</h3>
+  <text>We value your feedback to improve our course and services. 
+    <br>Please take a moment to share your thoughts with us.</text>
+    <br>
+    
+    <div class="formdesign">
+    <form>
+
+      <label for="like">Q1)What do you like most about this course, Duality of the Body and Mind?</label> <br>
+    <input type="text" name="like" id="like" placeholder="Enter here..." required> <br>
+    <label for="aspect">What aspects of the course could be improved?</label> <br>
+    <input type="text" name="aspect" id="aspect" placeholder="Enter here..." required> <br>
+
+    <label for="helpful">Q2)Were the course materials (videos, articles, quizzes) helpful in achieving the learning objectives?</label> <br>
+      <input type="radio" name="yes" id="yes" value="yes">
+      <label for="yes">Yes</label>
+      <input type="radio" name="no" id="no" value="no">
+      <label for="yes">No</label> <br>
+
+    <label for="easytofollow">Q3)Were the course modules well-structured and easy to follow?</label> <br>
+      <input type="radio" name="yes" id="yes" value="yes">
+      <label for="yes">Yes</label> 
+      <input type="radio" name="no" id="no" value="no">
+      <label for="no">No</label> <br>
+
+    <label for="effectivelyengage">Q4)Did this course effectively engage you?</label> <br>
+      <input type="radio" name="yes" id="yes" value="yes">
+      <label for="yes">Yes</label>
+      <input type="radio" name="no" id="no" value="no">
+      <label for="no">No</label> <br>
+
+    <label for="quiz">Q5)Were the quizzes and assessments appropriate in terms of difficulty and relevance?</label> <br>
+      <input type="radio" name="yes" id="yes" value="yes">
+      <label for="yes">Yes</label>
+      <input type="radio" name="no" id="no" value="no">
+      <label for="no">No</label> <br>
+
+    <label for="recommend">Q6)Would you recommend this course to others?</label> <br>
+      <input type="radio" name="yes" id="yes" value="yes">
+      <label for="yes">Yes</label> 
+      <input type="radio" name="no" id="no" value="no">
+      <label for="no">No</label> <br>
+
+      <label for="additional">Q7)Do you have any additional comments or suggestions for improvement?</label> <br>
+    <input type="text" name="additional" id="additional" placeholder="Enter here..." required> <br>
+    <input type="submit" href="Thankyou.html">
+  </form>
+  </div>
+</div>
+<script>
+function addtocart() {
+    var size = document.getElementById("size").value;
+    var quantity = document.getElementById("quantity").value;
+    var color = document.getElementById("color").value;
+
+    if (size === "" || quantity === "" || quantity === "0") {
+        alert("Please select a valid Size and Quantity.");
+        return false;
+    }
+
+    // Set the selected Size and Quantity values to hidden input fields
+    document.getElementById("size_input").value = size;
+    document.getElementById("quantity_input").value = quantity;
+    document.getElementById("color_input").value = color;
+
+    // Submit the form
+    return true;
+}
+document.addEventListener('DOMContentLoaded', function() {
+    let quantityInput = document.getElementById('quantity');
+    let stockElement = document.getElementById('stock');
+    let stock = parseInt(stockElement.getAttribute('data-stock'), 10);
+
+    quantityInput.addEventListener('input', function(event) {
+        let inputValue = parseInt(event.target.value, 10);
+
+        // Check if the input value exceeds the stock
+        if (inputValue > stock) {
+            alert('You cannot add more of this product than what is in stock.');
+            event.target.value = stock; // Set the input value to the maximum stock available
+        }
+    });
+});
+</script>
+{% endblock %}
