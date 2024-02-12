@@ -1,2 +1,2 @@
 # Sunset.AI-demo
-A demonstration of Sunset.AI's capabilities using Botpress and Zapier
+A demonstration of ProcoLink's capabilities on our Fictional Ecommerce website "Healthy Living" using Botpress
